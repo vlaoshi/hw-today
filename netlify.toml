@@ -4,3 +4,9 @@
   publish = "."
   # 서버 함수가 들어 있는 폴더
   functions = "netlify/functions"
+
+[build.environment]
+  # Netlify는 비밀 환경 변수의 값이 저장소 파일에 있으면 배포를 멈춰요.
+  # 지역 이름(예: koreacentral)은 비밀이 아니고 README·.env.example에 예시로 들어 있어서 검사에서 빼요.
+  # 진짜 비밀인 AZURE_TRANSLATOR_KEY는 계속 검사해요.
+  SECRETS_SCAN_OMIT_KEYS = "AZURE_TRANSLATOR_REGION"
