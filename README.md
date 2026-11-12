@@ -39,7 +39,7 @@
 
 ### 서버 함수가 필요한 이유
 
-이 프로젝트는 HTML·CSS·JavaScript 웹페이지에 작은 서버 함수(`api/` 폴더)를 더한 구조입니다.
+이 프로젝트는 HTML·CSS·JavaScript 웹페이지에 작은 서버 함수(`netlify/functions/` 폴더)를 더한 구조입니다.
 
 1. **시카고 미술관 API의 보안 검사:** 시카고 미술관 서버는 Cloudflare 보안 검사로 자동화된 요청을 막습니다. 미술관이 권장하는 `AIC-User-Agent` 헤더를 붙이면 통과하지만, 브라우저에서 이 헤더를 붙이면 CORS 사전 요청(OPTIONS)이 먼저 나가고 이 사전 요청이 보안 검사에 막혀 `Failed to fetch` 오류가 납니다. 그래서 서버 함수가 헤더를 붙여 대신 요청합니다.
 2. **번역 API 키 보호:** Azure 번역 키를 브라우저 코드에 넣으면 누구나 볼 수 있습니다. 키는 서버의 환경 변수에만 두고, 서버 함수가 대신 번역을 요청합니다.
@@ -51,11 +51,10 @@
 ├── style.css           디자인 (미술관 같은 미니멀 스타일)
 ├── script.js           명언·명화·번역 불러오기, 하루 고정, 새로 받기
 ├── themes.js           주제 사전, 제외할 어두운 단어 목록
-├── api/                Vercel 서버 함수
-│   ├── art/search.js     명화 검색 중계
-│   ├── art/image.js      명화 이미지 중계
-│   └── translate.js      번역 중계
-├── lib/handlers.js     서버 함수의 실제 코드 (배포·로컬 실행에서 함께 사용)
+├── lib/handlers.js     서버 함수의 실제 코드 (명화 검색·이미지·번역 중계)
+├── netlify/functions/  Netlify 서버 함수 (lib/handlers.js를 연결)
+├── netlify.toml        Netlify 배포 설정
+├── api/                Vercel 서버 함수 (Vercel로 배포할 때 사용)
 ├── local-server.js     내 컴퓨터에서 실행할 때 쓰는 서버
 ├── package.json
 └── .env.example        환경 변수 양식 (실제 키가 든 .env는 저장소에 올리지 않음)
@@ -76,10 +75,10 @@ npm start
 # 3) 브라우저에서 http://localhost:3000 접속
 ```
 
-## Vercel에 배포하기
+## Netlify에 배포하기
 
-1. 이 저장소를 [Vercel](https://vercel.com/)에 연결합니다. (Framework Preset: Other, 빌드 설정은 기본값)
-2. 프로젝트 설정의 **Environment Variables**에 아래 두 값을 추가합니다.
+1. 이 저장소를 [Netlify](https://www.netlify.com/)에 연결합니다. 배포 설정은 `netlify.toml`에 있어서 따로 입력할 것이 없습니다.
+2. 사이트 설정의 **Environment variables**에 아래 두 값을 추가합니다.
 
    | 이름 | 값 |
    |---|---|
@@ -87,6 +86,8 @@ npm start
    | `AZURE_TRANSLATOR_REGION` | Azure Translator 지역 (예: `koreacentral`) |
 
 3. 배포합니다.
+
+같은 서버 코드를 Vercel 형식(`api/` 폴더)으로도 연결해 두어서, [Vercel](https://vercel.com/)에 연결해도 같은 방식(환경 변수 두 개)으로 배포할 수 있습니다.
 
 ## 사용한 API
 

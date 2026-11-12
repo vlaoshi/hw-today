@@ -1,8 +1,8 @@
 // ===== 내 컴퓨터에서 실행하는 서버 =====
 // 실행: npm start (또는 node local-server.js)  →  http://localhost:3000
 //
-// 배포(Vercel)에서는 api/ 폴더의 함수가 쓰이고, 이 파일은 쓰이지 않아요.
-// 두 쪽 모두 lib/handlers.js의 같은 코드를 써서 똑같이 동작해요.
+// 배포할 때는 netlify/functions/ (Netlify) 또는 api/ (Vercel) 폴더의 함수가 쓰이고,
+// 이 파일은 쓰이지 않아요. 모두 lib/handlers.js의 같은 코드를 써서 똑같이 동작해요.
 // Node.js 기본 기능만 써서 따로 설치할 패키지가 없어요. (Node 20.12 이상 필요)
 
 import http from "node:http";
@@ -20,7 +20,7 @@ try {
   console.warn("⚠️  .env 파일이 없어서 번역 기능이 꺼져 있어요. (.env.example 참고)");
 }
 
-// 주소별로 어떤 기능을 쓸지 정해요 (Vercel의 api/ 폴더 구조와 같아요)
+// 주소별로 어떤 기능을 쓸지 정해요 (배포판의 서버 함수 주소와 같아요)
 const API_ROUTES = {
   "/api/art/search": artSearch,
   "/api/art/image": artImage,

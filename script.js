@@ -1,7 +1,7 @@
 // ===== 설정 =====
 const ADVICE_API_URL = "https://api.adviceslip.com/advice";
 // 명화 요청은 Cloudflare 보안 검사 때문에 브라우저에서 직접 보낼 수 없어서,
-// 서버 함수(배포: api/ 폴더, 내 컴퓨터: local-server.js)를 거쳐요.
+// 서버 함수(배포: netlify/functions/, 내 컴퓨터: local-server.js)를 거쳐요.
 const ART_SEARCH_URL = "/api/art/search";
 const ART_IMAGE_URL = "/api/art/image";
 const ART_PAGE_URL = "https://www.artic.edu/artworks"; // "자세히 보기" 링크용 (새 창으로 열려서 괜찮아요)

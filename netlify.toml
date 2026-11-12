@@ -1,0 +1,6 @@
+# Netlify 배포 설정
+[build]
+  # 빌드 과정 없이, 이 폴더의 파일을 그대로 웹페이지로 보여줘요
+  publish = "."
+  # 서버 함수가 들어 있는 폴더
+  functions = "netlify/functions"
