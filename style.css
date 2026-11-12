@@ -152,6 +152,22 @@ body {
   font-size: 1.3rem;
 }
 
+/* 한국어 제목이 있을 때: 한국어 제목은 한글 글꼴로 */
+.art-title:has(+ .art-title-original:not([hidden])) {
+  font-family: "Noto Serif KR", serif;
+  font-style: normal;
+  font-size: 1.2rem;
+  word-break: keep-all;
+}
+
+/* 원래 제목: 한국어 제목 아래에 작게 */
+.art-title-original {
+  margin-top: 2px;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
 .art-artist {
   margin-top: 4px;
   font-size: 1rem;

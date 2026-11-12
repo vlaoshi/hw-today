@@ -2,14 +2,14 @@
 
 날마다 기분전환이 될 생활 TIP 하나와, 그 TIP의 메시지에 어울리는 명화 한 점을 보여주는 웹페이지입니다.
 
-- **배포 주소:** (배포 후 추가 예정)
+- **배포 주소:** https://hw-today.netlify.app/
 
 ## 주요 기능
 
 | 기능 | 설명 |
 |---|---|
 | 오늘의 생활 TIP | [Advice Slip API](https://api.adviceslip.com/)에서 무작위 생활 조언(TIP)을 받아옵니다. |
-| 한국어 번역 | [Microsoft Azure Translator](https://learn.microsoft.com/azure/ai-services/translator/)로 영어 TIP을 한국어로 번역합니다. |
+| 한국어 번역 | [Microsoft Azure Translator](https://learn.microsoft.com/azure/ai-services/translator/)로 영어 TIP과 명화 제목을 한국어로 번역합니다. (작가 이름은 원어 그대로 표시) |
 | 어울리는 명화 | TIP의 핵심 단어로 주제를 정하고, [시카고 미술관(Art Institute of Chicago) API](https://api.artic.edu/docs/)에서 그 주제에 맞는 명화를 찾습니다. |
 | 하루 고정 | 같은 날에는 새로고침해도 같은 TIP과 명화가 나옵니다. (브라우저 localStorage에 저장) |
 | 새로 받기 | 하루에 한 번, 다른 TIP과 명화를 받을 수 있습니다. |
@@ -27,6 +27,8 @@ TIP 받기 (Advice Slip)
        명화 검색 (시카고 미술관 API)
           │   주제의 검색어 중 하나로 저작권이 풀린 작품 검색
           │   → 죽음·전쟁 같은 어두운 작품은 제외 → 무작위로 한 점 선택
+          ▼
+       명화 제목 번역 (Azure Translator)
           ▼
        화면에 표시 + 브라우저에 오늘 날짜로 저장
 ```

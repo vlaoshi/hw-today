@@ -18,6 +18,7 @@ const themeTagEl = document.getElementById("theme-tag");
 const artEl = document.getElementById("art");
 const artImageEl = document.getElementById("art-image");
 const artTitleEl = document.getElementById("art-title");
+const artTitleOriginalEl = document.getElementById("art-title-original");
 const artArtistEl = document.getElementById("art-artist");
 const artLinkEl = document.getElementById("art-link");
 const artStatusEl = document.getElementById("art-status");
@@ -184,10 +185,14 @@ async function fetchDailySet() {
   const slip = await fetchAdvice();
   const theme = findTheme(slip.advice);
 
-  // 번역과 명화 찾기는 서로 상관없어서 동시에 진행해요
+  // TIP 번역과 명화 찾기는 서로 상관없어서 동시에 진행해요.
+  // 명화는 찾은 뒤에 제목도 한국어로 번역해요 (작가 이름은 원어 그대로 둬요).
   const [translation, artwork] = await Promise.all([
     translateToKorean(slip.advice),
-    findArtwork(theme),
+    findArtwork(theme).then(async (found) => ({
+      ...found,
+      titleKo: await translateToKorean(found.title), // 실패하면 null
+    })),
   ]);
 
   return {
@@ -200,15 +205,21 @@ async function fetchDailySet() {
   };
 }
 
-// 저장된 세트에 번역이 없으면(지난번 실패, 키 설정 전에 받은 TIP) 한 번 더 번역해 봐요
-async function fillMissingTranslation(dailySet) {
-  if (dailySet.translation) return;
+// 저장된 세트에 번역이 빠져 있으면(지난번 실패, 기능 추가 전에 받은 세트) 한 번 더 번역해 봐요
+async function fillMissingTranslations(dailySet) {
+  const { artwork } = dailySet;
+  const [translation, titleKo] = await Promise.all([
+    dailySet.translation || translateToKorean(dailySet.slip.advice),
+    artwork.titleKo || translateToKorean(artwork.title),
+  ]);
 
-  const translation = await translateToKorean(dailySet.slip.advice);
-  if (translation) {
+  // 새로 채운 게 있을 때만 저장하고 화면을 고쳐요
+  if (translation !== dailySet.translation || titleKo !== artwork.titleKo) {
     dailySet.translation = translation;
+    artwork.titleKo = titleKo;
     save(dailySet);
     renderTranslation(translation);
+    renderArtTitle(artwork);
   }
 }
 
@@ -256,7 +267,7 @@ function renderDailySet(dailySet) {
   artImageEl.src = `${ART_IMAGE_URL}?id=${encodeURIComponent(artwork.imageId)}`;
   artImageEl.alt = artwork.altText;
 
-  artTitleEl.textContent = artwork.title;
+  renderArtTitle(artwork);
   artArtistEl.textContent = [artwork.artist, artwork.date].filter(Boolean).join(", ");
   artLinkEl.href = `${ART_PAGE_URL}/${artwork.id}`;
   artStatusEl.textContent = "";
@@ -269,6 +280,14 @@ function renderDailySet(dailySet) {
 function renderTranslation(translation) {
   quoteKoEl.textContent = translation || "";
   quoteKoEl.hidden = !translation;
+}
+
+// 명화 제목: 한국어 번역이 있으면 크게 보여주고 원래 제목은 아래 작게,
+// 번역이 없으면 원래 제목만 보여줘요
+function renderArtTitle(artwork) {
+  artTitleEl.textContent = artwork.titleKo || artwork.title;
+  artTitleOriginalEl.textContent = artwork.titleKo ? artwork.title : "";
+  artTitleOriginalEl.hidden = !artwork.titleKo;
 }
 
 // 새로 받기 버튼: 오늘 이미 썼으면 잠가요
@@ -327,7 +346,7 @@ async function init() {
   const saved = loadSaved();
   if (saved) {
     renderDailySet(saved);
-    fillMissingTranslation(saved); // 번역이 빠져 있으면 채워요
+    fillMissingTranslations(saved); // 번역이 빠져 있으면 채워요
     return;
   }
 
