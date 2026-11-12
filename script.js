@@ -7,7 +7,7 @@ const ART_IMAGE_URL = "/api/art/image";
 const ART_PAGE_URL = "https://www.artic.edu/artworks"; // "자세히 보기" 링크용 (새 창으로 열려서 괜찮아요)
 const TRANSLATE_URL = "/api/translate"; // 번역도 중계 서버를 거쳐요 (Azure 키는 서버에만 있어요)
 
-const STORAGE_KEY = "daily-quote-art"; // 브라우저에 오늘의 명언·명화를 저장할 이름
+const STORAGE_KEY = "daily-quote-art"; // 브라우저에 오늘의 TIP·명화를 저장할 이름
 
 // ===== 화면 요소 =====
 const dateEl = document.getElementById("today-date");
@@ -49,23 +49,23 @@ function showToday() {
   });
 }
 
-// ===== 1. 명언 =====
+// ===== 1. TIP =====
 
-// Advice Slip API에서 명언 하나를 받아와요
+// Advice Slip API에서 TIP 하나를 받아와요
 // 응답 형태: { "slip": { "id": 117, "advice": "..." } }
 async function fetchAdvice() {
   // 이 API는 같은 응답을 약 2초간 캐시해서, 브라우저 캐시를 쓰지 않도록 해요
   const response = await fetch(ADVICE_API_URL, { cache: "no-store" });
 
   if (!response.ok) {
-    throw new Error(`명언 API 응답 오류: ${response.status}`);
+    throw new Error(`TIP API 응답 오류: ${response.status}`);
   }
 
   const data = await response.json();
   return data.slip; // { id, advice }
 }
 
-// 영어 명언을 한국어로 번역해요. 실패하면 null을 돌려줘요 (번역 없이도 화면은 보여줘요).
+// 영어 TIP을 한국어로 번역해요. 실패하면 null을 돌려줘요 (번역 없이도 화면은 보여줘요).
 async function translateToKorean(text) {
   try {
     const response = await fetch(TRANSLATE_URL, {
@@ -82,9 +82,9 @@ async function translateToKorean(text) {
   }
 }
 
-// ===== 2. 명언 → 주제 찾기 =====
+// ===== 2. TIP → 주제 찾기 =====
 
-// 명언 속 단어가 키워드와 같은지 봐요 (love, loves, loved, loving 정도는 같은 단어로 쳐요)
+// TIP 속 단어가 키워드와 같은지 봐요 (love, loves, loved, loving 정도는 같은 단어로 쳐요)
 const SUFFIXES = ["", "s", "es", "d", "ed", "ing", "ly", "ful", "r", "er"];
 
 function wordMatches(word, keyword) {
@@ -93,7 +93,7 @@ function wordMatches(word, keyword) {
          (keyword.endsWith("e") && word === keyword.slice(0, -1) + "ing");
 }
 
-// 명언에 가장 많이 등장한 주제를 골라요. 하나도 없으면 기본 주제를 써요.
+// TIP에 가장 많이 등장한 주제를 골라요. 하나도 없으면 기본 주제를 써요.
 function findTheme(adviceText) {
   // 소문자로 바꾸고 알파벳만 남겨 단어 목록으로 나눠요
   const words = adviceText.toLowerCase().match(/[a-z']+/g) || [];
@@ -102,7 +102,7 @@ function findTheme(adviceText) {
   let bestScore = 0;
 
   for (const theme of THEMES) {
-    // 명언 단어 중 이 주제의 키워드와 맞는 개수가 점수예요
+    // TIP 단어 중 이 주제의 키워드와 맞는 개수가 점수예요
     const score = words.filter((word) =>
       theme.keywords.some((keyword) => wordMatches(word, keyword))
     ).length;
@@ -177,9 +177,9 @@ async function findArtwork(theme) {
   };
 }
 
-// ===== 4. 오늘의 세트(명언 + 주제 + 명화) 받아오기 =====
+// ===== 4. 오늘의 세트(TIP + 주제 + 명화) 받아오기 =====
 
-// 명언과 명화를 모두 받아온 뒤에 한꺼번에 돌려줘요. 하나라도 실패하면 오류를 던져요.
+// TIP과 명화를 모두 받아온 뒤에 한꺼번에 돌려줘요. 하나라도 실패하면 오류를 던져요.
 async function fetchDailySet() {
   const slip = await fetchAdvice();
   const theme = findTheme(slip.advice);
@@ -200,7 +200,7 @@ async function fetchDailySet() {
   };
 }
 
-// 저장된 세트에 번역이 없으면(지난번 실패, 키 설정 전에 받은 명언) 한 번 더 번역해 봐요
+// 저장된 세트에 번역이 없으면(지난번 실패, 키 설정 전에 받은 TIP) 한 번 더 번역해 봐요
 async function fillMissingTranslation(dailySet) {
   if (dailySet.translation) return;
 
@@ -229,7 +229,7 @@ function save(dailySet) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(dailySet));
   } catch {
-    // 저장에 실패해도 화면은 정상적으로 보여줘요 (새로고침하면 새 명언이 나와요)
+    // 저장에 실패해도 화면은 정상적으로 보여줘요 (새로고침하면 새 TIP이 나와요)
   }
 }
 
@@ -239,7 +239,7 @@ function save(dailySet) {
 function renderDailySet(dailySet) {
   const { slip, artwork } = dailySet;
 
-  // 명언
+  // TIP
   quoteEl.classList.remove("is-status");
   quoteEl.textContent = slip.advice;
   quoteMetaEl.textContent = `ADVICE #${slip.id}`;
@@ -278,10 +278,10 @@ function renderRefreshButton(used) {
   refreshButtonEl.textContent = used ? "내일 다시 만나요" : "새로 받기";
   refreshNoteEl.textContent = used
     ? "오늘의 새로 받기를 이미 사용했어요."
-    : "하루에 한 번, 다른 명언과 명화를 받을 수 있어요.";
+    : "하루에 한 번, 다른 TIP과 명화를 받을 수 있어요.";
 }
 
-// 명언 자리에 상태 문구를 보여줘요 (처음 불러오는 중·오류)
+// TIP 자리에 상태 문구를 보여줘요 (처음 불러오는 중·오류)
 function renderStatus(message) {
   quoteEl.classList.add("is-status");
   quoteEl.textContent = message;
@@ -332,7 +332,7 @@ async function init() {
   }
 
   // 오늘 처음이면 새로 받아서 저장해요
-  renderStatus("오늘의 명언과 명화를 준비하는 중이에요…");
+  renderStatus("오늘의 생활 TIP과 명화를 준비하는 중이에요…");
   try {
     const dailySet = await fetchDailySet();
     save(dailySet);

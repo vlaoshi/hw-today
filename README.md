@@ -1,6 +1,6 @@
-# 오늘의 명언과 명화
+# 오늘의 생활 TIP과 명화
 
-날마다 마음에 새길 명언 하나와, 그 명언의 메시지에 어울리는 명화 한 점을 보여주는 웹페이지입니다.
+날마다 기분전환이 될 생활 TIP 하나와, 그 TIP의 메시지에 어울리는 명화 한 점을 보여주는 웹페이지입니다.
 
 - **배포 주소:** (배포 후 추가 예정)
 
@@ -8,16 +8,16 @@
 
 | 기능 | 설명 |
 |---|---|
-| 오늘의 명언 | [Advice Slip API](https://api.adviceslip.com/)에서 무작위 명언을 받아옵니다. |
-| 한국어 번역 | [Microsoft Azure Translator](https://learn.microsoft.com/azure/ai-services/translator/)로 영어 명언을 한국어로 번역합니다. |
-| 어울리는 명화 | 명언의 핵심 단어로 주제를 정하고, [시카고 미술관(Art Institute of Chicago) API](https://api.artic.edu/docs/)에서 그 주제에 맞는 명화를 찾습니다. |
-| 하루 고정 | 같은 날에는 새로고침해도 같은 명언과 명화가 나옵니다. (브라우저 localStorage에 저장) |
-| 새로 받기 | 하루에 한 번, 다른 명언과 명화를 받을 수 있습니다. |
+| 오늘의 생활 TIP | [Advice Slip API](https://api.adviceslip.com/)에서 무작위 생활 조언(TIP)을 받아옵니다. |
+| 한국어 번역 | [Microsoft Azure Translator](https://learn.microsoft.com/azure/ai-services/translator/)로 영어 TIP을 한국어로 번역합니다. |
+| 어울리는 명화 | TIP의 핵심 단어로 주제를 정하고, [시카고 미술관(Art Institute of Chicago) API](https://api.artic.edu/docs/)에서 그 주제에 맞는 명화를 찾습니다. |
+| 하루 고정 | 같은 날에는 새로고침해도 같은 TIP과 명화가 나옵니다. (브라우저 localStorage에 저장) |
+| 새로 받기 | 하루에 한 번, 다른 TIP과 명화를 받을 수 있습니다. |
 
 ## 동작 방식
 
 ```
-명언 받기 (Advice Slip)
+TIP 받기 (Advice Slip)
    │
    ├─▶ 한국어 번역 (Azure Translator)
    │
@@ -31,9 +31,9 @@
        화면에 표시 + 브라우저에 오늘 날짜로 저장
 ```
 
-### 명언과 명화를 잇는 방법: 주제 사전
+### TIP과 명화를 잇는 방법: 주제 사전
 
-[themes.js](themes.js)에 8가지 주제(사랑과 관계, 평온과 휴식, 용기와 도전, 노력과 성장, 기쁨과 즐거움, 시간과 인생, 소박한 일상, 자연)를 정의했습니다. 각 주제에는 **명언에서 찾을 키워드**와 **명화를 찾을 검색어**가 있습니다. 명언 속 단어와 가장 많이 겹치는 주제를 고르고, 해당하는 주제가 없으면 기본 주제(오늘의 영감)를 씁니다.
+[themes.js](themes.js)에 8가지 주제(사랑과 관계, 평온과 휴식, 용기와 도전, 노력과 성장, 기쁨과 즐거움, 시간과 인생, 소박한 일상, 자연)를 정의했습니다. 각 주제에는 **TIP에서 찾을 키워드**와 **명화를 찾을 검색어**가 있습니다. TIP 속 단어와 가장 많이 겹치는 주제를 고르고, 해당하는 주제가 없으면 기본 주제(오늘의 영감)를 씁니다.
 
 기분전환을 위한 사이트이므로, 작품 제목이나 미술관의 주제 태그에 죽음·전쟁·고통 관련 단어가 있는 작품은 후보에서 제외합니다 (`DARK_WORDS`).
 
@@ -49,7 +49,7 @@
 ```
 ├── index.html          웹페이지 구조
 ├── style.css           디자인 (미술관 같은 미니멀 스타일)
-├── script.js           명언·명화·번역 불러오기, 하루 고정, 새로 받기
+├── script.js           TIP·명화·번역 불러오기, 하루 고정, 새로 받기
 ├── themes.js           주제 사전, 제외할 어두운 단어 목록
 ├── lib/handlers.js     서버 함수의 실제 코드 (명화 검색·이미지·번역 중계)
 ├── netlify/functions/  Netlify 서버 함수 (lib/handlers.js를 연결)
@@ -93,7 +93,7 @@ npm start
 
 | API | 용도 | 인증 |
 |---|---|---|
-| [Advice Slip](https://api.adviceslip.com/) | 명언 | 없음 |
+| [Advice Slip](https://api.adviceslip.com/) | TIP | 없음 |
 | [Art Institute of Chicago](https://api.artic.edu/docs/) | 명화 검색, 이미지 | 없음 (`AIC-User-Agent` 헤더 권장) |
 | [Azure Translator](https://learn.microsoft.com/azure/ai-services/translator/) | 영어 → 한국어 번역 | API 키 (무료 F0 등급) |
 
