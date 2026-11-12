@@ -1,0 +1,11 @@
+# 비밀 키가 들어 있는 파일은 올리지 않아요
+.env
+
+# Vercel CLI가 만드는 설정 폴더
+.vercel
+
+# 맥(macOS)이 자동으로 만드는 파일
+.DS_Store
+
+# 혹시 나중에 패키지를 설치하게 되면
+node_modules

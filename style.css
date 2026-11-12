@@ -1,0 +1,236 @@
+/* ===== 색상과 기본값 ===== */
+:root {
+  --bg: #faf8f4;          /* 미술관 벽처럼 따뜻한 흰색 */
+  --text: #2b2b2b;        /* 본문 글자색 */
+  --muted: #8a8580;       /* 보조 글자색 */
+  --line: #e2ddd5;        /* 구분선 */
+  --accent: #9c7a4d;      /* 액자 같은 금빛 포인트 */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Cormorant Garamond", "Noto Serif KR", serif;
+  line-height: 1.6;
+}
+
+/* ===== 전체 레이아웃 ===== */
+.container {
+  flex: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 16px 48px;
+  text-align: center;
+}
+
+/* ===== 머리말 ===== */
+.date {
+  font-family: "Noto Serif KR", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.title {
+  margin-top: 8px;
+  font-family: "Noto Serif KR", serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: 0.1em;
+}
+
+/* 제목 아래 짧은 금빛 선 */
+.title::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  margin: 20px auto 0;
+  background: var(--accent);
+}
+
+/* ===== 명언 ===== */
+.quote-section {
+  margin-top: 48px;
+}
+
+.quote {
+  font-style: italic;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  line-height: 1.4;
+}
+
+/* 앞뒤 큰따옴표 장식 */
+.quote::before { content: "“"; color: var(--accent); }
+.quote::after  { content: "”"; color: var(--accent); }
+
+/* 불러오는 중이거나 오류일 때는 따옴표 없이 흐리게 */
+.quote.is-status {
+  font-size: 1.1rem;
+  font-style: normal;
+  font-family: "Noto Serif KR", serif;
+  color: var(--muted);
+}
+.quote.is-status::before,
+.quote.is-status::after { content: none; }
+
+/* 한국어 번역: 영어 원문 아래에 차분하게 */
+.quote-ko {
+  margin-top: 16px;
+  font-family: "Noto Serif KR", serif;
+  font-size: clamp(1rem, 2.6vw, 1.2rem);
+  line-height: 1.7;
+  color: #55504a;
+  word-break: keep-all; /* 한국어 단어가 중간에 끊기지 않게 */
+}
+
+.quote-meta {
+  margin-top: 20px;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+/* ===== 주제 표시 ===== */
+.theme-tag {
+  margin-top: 40px;
+  font-family: "Noto Serif KR", serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+
+/* ===== 명화 ===== */
+.art-section {
+  margin-top: 24px;
+}
+
+/* hidden 속성이 display 설정에 덮이지 않도록 해요 */
+[hidden] {
+  display: none !important;
+}
+
+/* 미술관 액자처럼: 흰 여백(매트) + 얇은 테두리 + 은은한 그림자 */
+.art-frame {
+  display: inline-block;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgba(60, 50, 40, 0.12);
+}
+
+.art-image {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  height: auto;
+  /* 이미지가 다 받아질 때까지 투명하게 두었다가 부드럽게 나타나요 */
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.art-image.is-loaded {
+  opacity: 1;
+}
+
+.art-caption {
+  margin-top: 24px;
+}
+
+.art-title {
+  font-style: italic;
+  font-size: 1.3rem;
+}
+
+.art-artist {
+  margin-top: 4px;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.art-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: "Noto Serif KR", serif;
+  font-size: 0.8rem;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.art-link:hover {
+  border-bottom-color: var(--accent);
+}
+
+.art-status {
+  font-family: "Noto Serif KR", serif;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* 휴대폰에서는 액자 여백을 줄여요 */
+@media (max-width: 480px) {
+  .art-frame {
+    padding: 10px;
+  }
+}
+
+/* ===== 새로 받기 버튼 ===== */
+.refresh-section {
+  margin-top: 48px;
+}
+
+.refresh-button {
+  padding: 10px 28px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: "Noto Serif KR", serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* 이미 사용했거나 불러오는 중일 때 */
+.refresh-button:disabled {
+  border-color: var(--line);
+  color: var(--muted);
+  cursor: default;
+}
+
+.refresh-note {
+  margin-top: 10px;
+  font-family: "Noto Serif KR", serif;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ===== 바닥글 ===== */
+.footer {
+  padding: 24px 16px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-family: "Noto Serif KR", serif;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.footer a {
+  color: inherit;
+}

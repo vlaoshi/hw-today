@@ -1,0 +1,13 @@
+{
+  "name": "daily-quote-art",
+  "version": "1.0.0",
+  "description": "날마다 명언 하나와 어울리는 명화를 보여주는 웹페이지",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node local-server.js"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

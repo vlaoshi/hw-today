@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘의 명언과 명화</title>
+  <!-- 글꼴: 영문 세리프(Cormorant Garamond) + 한글 세리프(Noto Serif KR) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <!-- 머리말: 제목과 오늘 날짜 -->
+    <header class="header">
+      <p class="date" id="today-date"></p>
+      <h1 class="title">오늘의 명언</h1>
+    </header>
+
+    <!-- 명언 영역 -->
+    <section class="quote-section">
+      <blockquote class="quote" id="quote-text">명언을 불러오는 중이에요…</blockquote>
+      <p class="quote-ko" id="quote-ko" hidden></p>
+      <p class="quote-meta" id="quote-meta"></p>
+    </section>
+
+    <!-- 명언과 명화를 이어주는 주제 표시 -->
+    <p class="theme-tag" id="theme-tag" hidden></p>
+
+    <!-- 명화 영역 -->
+    <section class="art-section">
+      <figure class="art" id="art" hidden>
+        <div class="art-frame">
+          <img class="art-image" id="art-image" alt="">
+        </div>
+        <figcaption class="art-caption">
+          <p class="art-title" id="art-title"></p>
+          <p class="art-artist" id="art-artist"></p>
+          <a class="art-link" id="art-link" target="_blank" rel="noopener">작품 자세히 보기 →</a>
+        </figcaption>
+      </figure>
+      <p class="art-status" id="art-status"></p>
+    </section>
+
+    <!-- 새로 받기 (하루 1회) -->
+    <section class="refresh-section">
+      <button class="refresh-button" id="refresh-button" type="button" hidden>새로 받기</button>
+      <p class="refresh-note" id="refresh-note"></p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    명언 제공: <a href="https://api.adviceslip.com/" target="_blank" rel="noopener">Advice Slip API</a>
+    · 명화 제공: <a href="https://www.artic.edu/" target="_blank" rel="noopener">Art Institute of Chicago</a>
+    · 번역: Microsoft Azure Translator
+  </footer>
+
+  <!-- themes.js(주제 사전)를 먼저 불러와야 script.js에서 쓸 수 있어요 -->
+  <script src="themes.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
